@@ -15,6 +15,22 @@
       .filter((feature) => feature.get("priority") === "高");
   }
 
+  function layerFeatures(key) {
+    return window.CraneLayers.sources[key].getFeatures();
+  }
+
+  function infraFeatures() {
+    return [
+      ...layerFeatures("wind_farms"),
+      ...layerFeatures("powerlines")
+    ];
+  }
+
+  function selectedNode(nodeId) {
+    return layerFeatures("migration_nodes")
+      .filter((feature) => feature.get("node_id") === nodeId);
+  }
+
   function setVisible(keys) {
     window.CraneLayers.layerOrder.forEach((key) => {
       window.CraneLayers.setLayerVisible(key, keys.includes(key));
@@ -30,21 +46,44 @@
     if (demoStatus) demoStatus.textContent = text;
   }
 
+  function setDemoStage(step, title, detail, updateList) {
+    const banner = document.getElementById("demo-stage-banner");
+    const stepNode = document.getElementById("demo-stage-step");
+    const titleNode = document.getElementById("demo-stage-title");
+    const detailNode = document.getElementById("demo-stage-detail");
+    if (banner && stepNode && titleNode && detailNode) {
+      stepNode.textContent = step;
+      titleNode.textContent = title;
+      detailNode.textContent = detail;
+      banner.classList.remove("is-pulsing");
+      void banner.offsetWidth;
+      banner.classList.add("is-active", "is-pulsing");
+    }
+    setStepStatus(`${step}：${title}。${detail}`, updateList);
+  }
+
+  function highlightAndZoom(features) {
+    if (!features || !features.length) return;
+    window.CraneLayers.setHighlight(features);
+    window.CraneLayers.zoomToFeatures(features);
+  }
+
   function step1() {
     stopAnimation();
     window.CraneLayers.clearAnalysis();
     window.CraneLayers.clearHighlight();
     setVisible(["migration_nodes", "migration_corridors"]);
-    setStepStatus("Step 1：显示自然迁徙节点和迁徙廊道");
-    window.CraneLayers.zoomToAll();
+    const features = [...layerFeatures("migration_nodes"), ...layerFeatures("migration_corridors")];
+    highlightAndZoom(features);
+    setDemoStage("Step 1", "自然迁徙网络", "显示迁徙节点与基础廊道，先建立白枕鹤春季迁徙网络的整体空间格局。");
   }
 
   function step2() {
     stopAnimation();
     window.CraneLayers.clearHighlight();
     setVisible(["migration_nodes", "migration_corridors", "wind_farms", "powerlines"]);
-    setStepStatus("Step 2：叠加风电场和输电线路");
-    window.CraneLayers.zoomToAll();
+    highlightAndZoom(infraFeatures());
+    setDemoStage("Step 2", "基础设施叠加", "高亮风电场和输电线路，观察它们与迁徙节点、廊道的空间邻近关系。");
   }
 
   function step3() {
@@ -52,8 +91,9 @@
     window.CraneLayers.clearAnalysis();
     setVisible(["migration_nodes", "migration_corridors", "wind_farms", "powerlines"]);
     const features = highRiskCorridors();
-    window.CraneLayers.setHighlight(features);
+    highlightAndZoom(features);
     window.CraneQuery.renderResults(features, "Step 3 高风险廊道");
+    setDemoStage("Step 3", "高风险廊道识别", "重点查看成本增加明显、受基础设施影响更强的廊道段。", false);
   }
 
   function step4() {
@@ -61,8 +101,9 @@
     window.CraneLayers.clearAnalysis();
     setVisible(["migration_nodes", "migration_corridors", "wind_farms", "powerlines", "conservation_notes"]);
     const features = highPriorityNotes();
-    window.CraneLayers.setHighlight(features);
+    highlightAndZoom(features);
     window.CraneQuery.renderResults(features, "Step 4 高优先级保护建议");
+    setDemoStage("Step 4", "保护建议与核查点", "显示高优先级保护建议点，为后续廊道管控和人工核查提供位置线索。", false);
   }
 
   async function step5() {
@@ -70,7 +111,8 @@
     setVisible(["migration_nodes", "migration_corridors", "wind_farms", "powerlines", "conservation_notes"]);
     document.getElementById("gp-node-select").value = "N05";
     document.getElementById("gp-radius-input").value = "30";
-    setStepStatus("Step 5：对 N05 科尔沁草原停歇区执行节点周边基础设施压力分析");
+    highlightAndZoom(selectedNode("N05"));
+    setDemoStage("Step 5", "节点压力分析", "以 N05 科尔沁草原停歇区为例，计算周边风电场和输电线路压力。");
     await window.CraneGP.runAnalysis();
   }
 
@@ -85,6 +127,7 @@
       window.CraneLayers.setHighlight([feature]);
       window.CraneLayers.zoomToFeatures([feature]);
       window.CraneQuery.renderResults([feature], "逐条高亮高风险廊道");
+      setDemoStage("高风险动画", `正在高亮 ${feature.get("edge_id") || "廊道"}`, "逐条查看高风险廊道，适合课程录屏讲解。", false);
       cursor += 1;
     }, 1500);
   }
@@ -109,42 +152,44 @@
     window.CraneLayers.clearAnalysis();
     window.CraneLayers.clearHighlight();
     setVisible(["migration_nodes"]);
-    setStepStatus("演示 1/8：显示白枕鹤春季迁徙网络节点");
-    window.CraneLayers.zoomToAll();
+    const features = layerFeatures("migration_nodes");
+    highlightAndZoom(features);
+    setDemoStage("演示 1/8", "迁徙节点", "先显示白枕鹤春季迁徙网络中的停歇节点和连接节点。");
   }
 
   function demoStepCorridors() {
     stopAnimation();
     window.CraneLayers.clearHighlight();
     setVisible(["migration_nodes", "migration_corridors"]);
-    setStepStatus("演示 2/8：叠加迁徙廊道，展示节点之间的连通关系");
-    window.CraneLayers.zoomToAll();
+    const features = layerFeatures("migration_corridors");
+    highlightAndZoom(features);
+    setDemoStage("演示 2/8", "迁徙廊道", "叠加节点之间的迁徙廊道，展示春季北迁网络的连通关系。");
   }
 
   function demoStepInfrastructure() {
     stopAnimation();
     window.CraneLayers.clearHighlight();
     setVisible(["migration_nodes", "migration_corridors", "wind_farms", "powerlines"]);
-    setStepStatus("演示 3/8：叠加风电场和输电线路，观察基础设施压力");
-    window.CraneLayers.zoomToAll();
+    highlightAndZoom(infraFeatures());
+    setDemoStage("演示 3/8", "基础设施压力", "高亮风电场和输电线路，观察设施与迁徙廊道的叠加位置。");
   }
 
   function demoStepHighRisk() {
     stopAnimation();
     setVisible(["migration_nodes", "migration_corridors", "wind_farms", "powerlines"]);
     const features = highRiskCorridors();
-    window.CraneLayers.setHighlight(features);
+    highlightAndZoom(features);
     window.CraneQuery.renderResults(features, "演示 4/8 高风险廊道");
-    setStepStatus("演示 4/8：高亮成本增加明显的高风险廊道", false);
+    setDemoStage("演示 4/8", "高风险廊道", "高亮成本增加明显的廊道，说明基础设施阻断效应的重点区域。", false);
   }
 
   function demoStepNotes() {
     stopAnimation();
     setVisible(["migration_nodes", "migration_corridors", "wind_farms", "powerlines", "conservation_notes"]);
     const features = highPriorityNotes();
-    window.CraneLayers.setHighlight(features);
+    highlightAndZoom(features);
     window.CraneQuery.renderResults(features, "演示 5/8 高优先级保护建议");
-    setStepStatus("演示 5/8：显示保护建议点和人工核查对象", false);
+    setDemoStage("演示 5/8", "保护建议点", "显示高优先级保护建议和人工核查点，承接风险识别后的管理建议。", false);
   }
 
   async function demoStepGP() {
@@ -152,19 +197,21 @@
     setVisible(["migration_nodes", "migration_corridors", "wind_farms", "powerlines", "conservation_notes"]);
     document.getElementById("gp-node-select").value = "N05";
     document.getElementById("gp-radius-input").value = "30";
-    setStepStatus("演示 6/8：对 N05 执行节点周边基础设施压力分析");
+    highlightAndZoom(selectedNode("N05"));
+    setDemoStage("演示 6/8", "节点压力分析", "选择 N05 科尔沁草原停歇区，执行节点周边基础设施压力分析。");
     await window.CraneGP.runAnalysis();
   }
 
   async function demoStepGps() {
     setVisible(["migration_nodes", "migration_corridors", "wind_farms", "powerlines", "conservation_notes"]);
-    setStepStatus("演示 7/8：启动模拟 GPS 轨迹回放，遇到高风险廊道时自动提醒");
+    setDemoStage("演示 7/8", "模拟 GPS 轨迹回放", "启动轨迹回放演示，移动点经过高风险廊道时同步高亮提醒。");
     await window.CraneGPSReplay.start({ reset: true, interval: 1300 });
   }
 
   function demoStepDashboardTip() {
     setVisible(["migration_nodes", "migration_corridors", "wind_farms", "powerlines", "conservation_notes"]);
-    setStepStatus("演示 8/8：可打开数据大屏查看态势统计、模拟 GPS 播报和小地图");
+    window.CraneLayers.clearHighlight();
+    setDemoStage("演示 8/8", "进入数据大屏", "可打开数据大屏查看态势统计、模拟 GPS 播报和小地图。");
   }
 
   const fullDemoSteps = [
@@ -202,7 +249,7 @@
     clearAutoTimer();
     stopAnimation();
     window.CraneGPSReplay.pause();
-    setStepStatus("一键演示已暂停，可重新启动或重置");
+    setDemoStage("演示暂停", "一键演示已暂停", "可重新启动演示，或点击重置恢复完整图层。");
   }
 
   function resetAnimation() {
@@ -215,7 +262,7 @@
     window.CraneLayers.clearHighlight();
     window.CraneLayers.clearAnalysis();
     setVisible(["migration_nodes", "migration_corridors", "wind_farms", "powerlines", "conservation_notes"]);
-    setStepStatus("演示已重置");
+    setDemoStage("演示重置", "已恢复完整图层", "点击“一键演示”可重新开始分步讲解。");
     window.CraneLayers.zoomToAll();
   }
 
