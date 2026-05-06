@@ -45,6 +45,20 @@
     `;
   }
 
+  function saveLastResult(result) {
+    try {
+      window.localStorage.setItem("crane_last_gp_result", JSON.stringify({
+        pressureLevel: result.pressureLevel,
+        radiusKm: result.radiusKm,
+        windCount: result.windCount,
+        powerlineLengthKm: result.powerlineLengthKm,
+        analyzedAt: new Date().toISOString()
+      }));
+    } catch (error) {
+      // localStorage is optional for the dashboard overview.
+    }
+  }
+
   function currentInfraCollections() {
     return {
       wind: window.CraneLayers.getCollectionGeoJSON("wind_farms"),
@@ -136,26 +150,66 @@
   }
 
   async function executeWPSNodePressureAnalysis(pointGeometry, radiusKm) {
-    // TODO: GeoServer WPS 插件启用后，在这里构造 Execute XML 或 KVP 请求。
-    // 当前本机 GeoServer 返回 No service: wps，因此默认不走该分支。
-    throw new Error(`WPS not configured for radius ${radiusKm} at ${JSON.stringify(pointGeometry.coordinates)}`);
+    const distanceDegrees = Number(radiusKm) / 111.32;
+    const executeXml = `<?xml version="1.0" encoding="UTF-8"?>
+<wps:Execute service="WPS" version="1.0.0"
+  xmlns:wps="http://www.opengis.net/wps/1.0.0"
+  xmlns:ows="http://www.opengis.net/ows/1.1">
+  <ows:Identifier>JTS:buffer</ows:Identifier>
+  <wps:DataInputs>
+    <wps:Input>
+      <ows:Identifier>geom</ows:Identifier>
+      <wps:Data>
+        <wps:ComplexData mimeType="application/json"><![CDATA[${JSON.stringify(pointGeometry)}]]></wps:ComplexData>
+      </wps:Data>
+    </wps:Input>
+    <wps:Input>
+      <ows:Identifier>distance</ows:Identifier>
+      <wps:Data><wps:LiteralData>${distanceDegrees}</wps:LiteralData></wps:Data>
+    </wps:Input>
+    <wps:Input>
+      <ows:Identifier>quadrantSegments</ows:Identifier>
+      <wps:Data><wps:LiteralData>18</wps:LiteralData></wps:Data>
+    </wps:Input>
+  </wps:DataInputs>
+  <wps:ResponseForm>
+    <wps:RawDataOutput mimeType="application/json">
+      <ows:Identifier>result</ows:Identifier>
+    </wps:RawDataOutput>
+  </wps:ResponseForm>
+</wps:Execute>`;
+    const response = await fetch(window.CraneConfig.WPS_URL, {
+      method: "POST",
+      headers: { "Content-Type": "text/xml;charset=utf-8" },
+      body: executeXml
+    });
+    if (!response.ok) throw new Error(`WPS HTTP ${response.status}`);
+    const text = await response.text();
+    if (/ExceptionReport|ExceptionText/i.test(text)) {
+      throw new Error(text.replace(/\s+/g, " ").slice(0, 180));
+    }
+    const wpsBuffer = JSON.parse(text);
+    const result = await executeFrontendGPAnalysis(pointGeometry, radiusKm);
+    result.buffer = wpsBuffer.type === "Feature" ? wpsBuffer.geometry : wpsBuffer;
+    result.engine = "GeoServer WPS buffer";
+    return result;
   }
 
   async function executeGPAnalysis(pointGeometry, radiusKm) {
     if (window.CraneConfig.USE_WPS) {
       try {
-        setStatus("正在调用 GeoServer WPS...");
+        setStatus("正在执行节点周边基础设施压力分析...");
         return await executeWPSNodePressureAnalysis(pointGeometry, radiusKm);
       } catch (error) {
-        setStatus("WPS 不可用，已切换到本地计算");
+        setStatus("分析服务暂不可用，已切换到本地计算");
       }
     }
-    if (window.CraneConfig.USE_NODE_GP) {
+    if (window.CraneConfig.USE_NODE_GP || window.CraneConfig.USE_WPS) {
       try {
-        setStatus("正在调用 Node GP 服务...");
+        setStatus("正在执行节点周边基础设施压力分析...");
         return await executeNodeGPAnalysis(pointGeometry, radiusKm);
       } catch (error) {
-        setStatus("Node GP 不可用，已切换到前端 Turf");
+        setStatus("分析服务暂不可用，已切换到本地计算");
       }
     }
     return executeFrontendGPAnalysis(pointGeometry, radiusKm);
@@ -172,6 +226,7 @@
     const pointFeature = { type: "Feature", properties: { name: "分析点" }, geometry: pointGeometry };
     window.CraneLayers.showAnalysis(result.buffer, result.affectedFeatures, pointFeature);
     renderResult(result);
+    saveLastResult(result);
     setStatus(`分析完成：${result.pressureLevel}压力`);
     return result;
   }

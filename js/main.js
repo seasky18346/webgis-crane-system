@@ -1,4 +1,7 @@
 (function () {
+  let bootstrapReady = false;
+  let queuedDemo = false;
+
   function populateNodeSelect() {
     const select = document.getElementById("gp-node-select");
     const options = window.CraneLayers.sources.migration_nodes.getFeatures()
@@ -35,6 +38,23 @@
     });
   }
 
+  function setupCollapsiblePanels() {
+    document.querySelectorAll(".tool-block, .output-block").forEach((panel) => {
+      const title = panel.querySelector("h2");
+      if (!title || title.querySelector(".collapse-toggle")) return;
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "collapse-toggle";
+      button.textContent = "收起";
+      button.setAttribute("aria-label", `收起或展开${title.childNodes[0] ? title.childNodes[0].textContent.trim() : "模块"}`);
+      button.addEventListener("click", () => {
+        panel.classList.toggle("is-collapsed");
+        button.textContent = panel.classList.contains("is-collapsed") ? "展开" : "收起";
+      });
+      title.appendChild(button);
+    });
+  }
+
   function setupPopup(map) {
     document.getElementById("popup-closer").addEventListener("click", window.CraneLayers.closePopup);
     map.on("singleclick", (event) => {
@@ -59,11 +79,46 @@
   }
 
   function setModeChips() {
-    document.getElementById("data-mode-chip").textContent = window.CraneConfig.USE_GEOSERVER ? "GeoServer WFS" : "本地 GeoJSON";
-    document.getElementById("gp-mode-chip").textContent = window.CraneConfig.USE_WPS
-      ? "GeoServer WPS"
-      : (window.CraneConfig.USE_NODE_GP ? "Node GP" : "前端 Turf GP");
-    document.getElementById("service-chip").textContent = window.CraneConfig.USE_GEOSERVER ? "服务模式" : "演示模式";
+    document.getElementById("data-mode-chip").textContent = window.CraneConfig.USE_GEOSERVER ? "服务数据" : "本地演示数据";
+    document.getElementById("gp-mode-chip").textContent = "节点周边基础设施压力分析";
+    document.getElementById("service-chip").textContent = window.CraneConfig.USE_GEOSERVER ? "服务模式" : "课程演示模式";
+  }
+
+  function hideLaunchScreen() {
+    document.body.classList.remove("is-launching");
+    const launch = document.getElementById("launch-screen");
+    if (launch) launch.setAttribute("aria-hidden", "true");
+  }
+
+  function showLaunchScreen() {
+    document.body.classList.add("is-launching");
+    const launch = document.getElementById("launch-screen");
+    if (launch) launch.setAttribute("aria-hidden", "false");
+  }
+
+  function setupLaunchActions() {
+    showLaunchScreen();
+    const enter = document.getElementById("enter-system-btn");
+    const dashboard = document.getElementById("open-dashboard-btn");
+    const demo = document.getElementById("launch-demo-btn");
+    const back = document.getElementById("back-launch-btn");
+    const headerDashboard = document.getElementById("header-dashboard-btn");
+    if (enter) enter.addEventListener("click", hideLaunchScreen);
+    if (dashboard) dashboard.addEventListener("click", () => {
+      window.location.href = window.CraneConfig.DASHBOARD_URL;
+    });
+    if (headerDashboard) headerDashboard.addEventListener("click", () => {
+      window.location.href = window.CraneConfig.DASHBOARD_URL;
+    });
+    if (back) back.addEventListener("click", showLaunchScreen);
+    if (demo) demo.addEventListener("click", async () => {
+      hideLaunchScreen();
+      queuedDemo = true;
+      if (bootstrapReady && window.CraneAnimation) {
+        await window.CraneAnimation.startFullDemo();
+        queuedDemo = false;
+      }
+    });
   }
 
   async function bootstrap() {
@@ -76,15 +131,23 @@
     window.CraneQuery.setupQueryEvents();
     window.CraneEdit.setupEditing(map);
     window.CraneGP.setupGPEvents();
+    window.CraneGPSReplay.setupControls();
     window.CraneAnimation.setupAnimationEvents();
     setupPopup(map);
     window.CraneRenderers.updateLegend();
     window.CraneLayers.zoomToAll();
     document.getElementById("query-results").innerHTML = "<p class=\"empty-note\">系统已加载，可开始查询或演示</p>";
     document.getElementById("gp-results").innerHTML = "<p class=\"empty-note\">请选择节点或地图取点后开始分析</p>";
+    bootstrapReady = true;
+    if (queuedDemo && window.CraneAnimation) {
+      await window.CraneAnimation.startFullDemo();
+      queuedDemo = false;
+    }
   }
 
   window.addEventListener("DOMContentLoaded", () => {
+    setupCollapsiblePanels();
+    setupLaunchActions();
     bootstrap().catch((error) => {
       document.getElementById("query-results").innerHTML = `<p class="empty-note">系统初始化失败：${error.message}</p>`;
     });

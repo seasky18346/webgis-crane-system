@@ -3,38 +3,69 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>飞越风与电：白枕鹤迁徙廊道 WebGIS 分析系统</title>
+  <title>飞越风与电：迁徙鸟类廊道与电力基础设施风险 WebGIS 分析平台</title>
   <link rel="icon" href="data:,">
   <link rel="stylesheet" href="vendor/ol/ol.css">
   <link rel="stylesheet" href="css/style.css">
 </head>
-<body>
+<body class="is-launching">
+  <section id="launch-screen" class="launch-screen" aria-hidden="false">
+    <div class="launch-map-lines" aria-hidden="true">
+      <span class="route route-a"></span>
+      <span class="route route-b"></span>
+      <span class="route route-c"></span>
+      <span class="tower-line tower-line-a"></span>
+      <span class="tower-line tower-line-b"></span>
+    </div>
+    <div class="launch-content">
+      <p class="launch-kicker">当前示范案例：白枕鹤春季迁徙网络</p>
+      <h1>飞越风与电</h1>
+      <h2>迁徙鸟类廊道与电力基础设施风险 WebGIS 分析平台</h2>
+      <p class="launch-copy">以白枕鹤春季迁徙网络为示范案例，集成迁徙廊道展示、基础设施压力识别、保护建议编辑与空间分析功能。</p>
+      <div class="launch-actions">
+        <button id="enter-system-btn" class="primary large-action" type="button">进入分析系统</button>
+        <button id="open-dashboard-btn" class="large-action" type="button">打开数据大屏</button>
+        <button id="launch-demo-btn" class="large-action" type="button">启动演示模式</button>
+      </div>
+    </div>
+    <div class="launch-side">
+      <div class="bird-mark" aria-hidden="true"></div>
+      <div class="launch-stat"><span>10</span><strong>迁徙节点</strong></div>
+      <div class="launch-stat"><span>12</span><strong>迁徙廊道</strong></div>
+      <div class="launch-stat"><span>5</span><strong>高风险廊道</strong></div>
+    </div>
+  </section>
+
   <header class="app-header">
-    <div>
-      <h1>飞越风与电：白枕鹤迁徙廊道 WebGIS 分析系统</h1>
-      <p>春季迁徙节点、廊道与基础设施压力可视化</p>
+    <div class="brand-block">
+      <button id="back-launch-btn" class="ghost-button" type="button">启动页</button>
+      <div>
+        <h1>迁徙鸟类廊道与电力基础设施风险 WebGIS 分析平台</h1>
+        <p>当前示范案例：白枕鹤春季迁徙网络</p>
+      </div>
     </div>
     <div class="status-strip">
-      <span id="data-mode-chip">本地 GeoJSON</span>
-      <span id="gp-mode-chip">前端 Turf GP</span>
-      <span id="service-chip">GeoServer 可替换</span>
+      <span id="data-mode-chip">本地演示数据</span>
+      <span id="gp-mode-chip">节点周边基础设施压力分析</span>
+      <span id="service-chip">课程演示模式</span>
+      <button id="header-dashboard-btn" class="small-command" type="button">数据大屏</button>
     </div>
   </header>
 
   <div class="app-shell">
     <aside class="left-panel">
       <section class="tool-block">
-        <h2>图层</h2>
+        <h2>图层控制</h2>
         <label><input type="checkbox" id="layer-migration_nodes" checked> 迁徙节点</label>
         <label><input type="checkbox" id="layer-migration_corridors" checked> 迁徙廊道</label>
         <label><input type="checkbox" id="layer-wind_farms" checked> 风电场</label>
         <label><input type="checkbox" id="layer-powerlines" checked> 输电线路</label>
-        <label><input type="checkbox" id="layer-conservation_notes" checked> 保护建议</label>
-        <button id="zoom-all" type="button">全图</button>
+        <label><input type="checkbox" id="layer-conservation_notes" checked> 保护建议/风险标注</label>
+        <button id="zoom-all" type="button">全图定位</button>
       </section>
 
       <section class="tool-block">
-        <h2>查询</h2>
+        <h2>节点与廊道查询</h2>
         <div class="field-grid">
           <input id="node-id-input" type="text" placeholder="节点编号 N05">
           <select id="node-type-select">
@@ -70,7 +101,7 @@
       </section>
 
       <section class="tool-block">
-        <h2>编辑保护建议</h2>
+        <h2>保护建议编辑</h2>
         <div class="button-row">
           <button id="edit-add-btn" type="button">新增标注</button>
           <button id="edit-save-btn" type="button">保存属性</button>
@@ -116,7 +147,7 @@
       </section>
 
       <section class="tool-block">
-        <h2>节点压力分析</h2>
+        <h2>节点周边基础设施压力分析</h2>
         <div class="field-stack">
           <select id="gp-node-select"></select>
           <input id="gp-radius-input" type="number" min="1" max="100" value="30">
@@ -127,25 +158,13 @@
         </div>
         <p id="gp-status" class="tool-status">半径单位：km</p>
       </section>
-
-      <section class="tool-block">
-        <h2>阻断效应演示</h2>
-        <div class="step-grid">
-          <button id="demo-step-1" type="button">Step 1 自然廊道</button>
-          <button id="demo-step-2" type="button">Step 2 基础设施</button>
-          <button id="demo-step-3" type="button">Step 3 高风险</button>
-          <button id="demo-step-4" type="button">Step 4 保护建议</button>
-          <button id="demo-step-5" type="button">Step 5 节点分析</button>
-        </div>
-        <div class="button-row">
-          <button id="anim-start" type="button">开始高亮</button>
-          <button id="anim-pause" type="button">暂停</button>
-          <button id="anim-reset" type="button">重置</button>
-        </div>
-      </section>
     </aside>
 
     <main class="map-wrap">
+      <div class="map-title-bar">
+        <span>生态监测指挥舱</span>
+        <strong>天地图暗色矢量底图</strong>
+      </div>
       <div id="map" class="map"></div>
       <div id="map-popup" class="map-popup">
         <button id="popup-closer" class="popup-closer" type="button">×</button>
@@ -154,6 +173,38 @@
     </main>
 
     <aside class="right-panel">
+      <section class="output-block demo-block">
+        <h2>一键演示模式</h2>
+        <p id="demo-status" class="tool-status strong-status">等待启动演示</p>
+        <div class="button-row">
+          <button id="demo-auto-start" class="primary" type="button">一键演示</button>
+          <button id="demo-auto-pause" type="button">暂停演示</button>
+          <button id="anim-reset" type="button">重置</button>
+        </div>
+        <div class="step-grid compact">
+          <button id="demo-step-1" type="button">Step 1 节点廊道</button>
+          <button id="demo-step-2" type="button">Step 2 基础设施</button>
+          <button id="demo-step-3" type="button">Step 3 高风险</button>
+          <button id="demo-step-4" type="button">Step 4 保护建议</button>
+          <button id="demo-step-5" type="button">Step 5 节点分析</button>
+          <button id="anim-start" type="button">高风险动画</button>
+          <button id="anim-pause" type="button">暂停高亮</button>
+        </div>
+      </section>
+
+      <section class="output-block">
+        <h2>模拟 GPS 轨迹回放</h2>
+        <p class="tool-status" data-gps-status>模拟 GPS 播报等待启动</p>
+        <div class="button-row">
+          <button data-gps-start type="button">开始</button>
+          <button data-gps-pause type="button">暂停</button>
+          <button data-gps-reset type="button">重置</button>
+        </div>
+        <div class="gps-feed" data-gps-feed>
+          <p class="empty-note">模拟 GPS 播报等待启动</p>
+        </div>
+      </section>
+
       <section class="output-block">
         <h2>查询结果</h2>
         <div id="query-results" class="result-list"></div>
@@ -182,6 +233,7 @@
   <script src="js/query.js"></script>
   <script src="js/edit.js"></script>
   <script src="js/gpAnalysis.js"></script>
+  <script src="js/gpsReplay.js"></script>
   <script src="js/animation.js"></script>
   <script src="js/main.js"></script>
 </body>

@@ -1,0 +1,102 @@
+[
+  {
+    "bird_id": "WNC-DEMO-01",
+    "timestamp": "2026-03-18T08:00:00+08:00",
+    "lon": 117.72,
+    "lat": 39.05,
+    "near_node": "N03",
+    "corridor_id": "E03",
+    "risk_level": "低",
+    "message": "[模拟GPS] WNC-DEMO-01 进入节点 N03 周边，当前风险等级：低"
+  },
+  {
+    "bird_id": "WNC-DEMO-01",
+    "timestamp": "2026-03-18T10:00:00+08:00",
+    "lon": 119.0,
+    "lat": 40.25,
+    "near_node": "N04",
+    "corridor_id": "E03",
+    "risk_level": "高",
+    "message": "[模拟GPS] WNC-DEMO-01 通过高风险廊道 E03，建议关注辽西丘陵段连通性"
+  },
+  {
+    "bird_id": "WNC-DEMO-01",
+    "timestamp": "2026-03-18T12:00:00+08:00",
+    "lon": 120.85,
+    "lat": 41.35,
+    "near_node": "N04",
+    "corridor_id": "E04",
+    "risk_level": "高",
+    "message": "[模拟GPS] WNC-DEMO-01 靠近输电线路缓冲区，当前风险等级：高"
+  },
+  {
+    "bird_id": "WNC-DEMO-01",
+    "timestamp": "2026-03-18T14:00:00+08:00",
+    "lon": 121.45,
+    "lat": 42.65,
+    "near_node": "N05",
+    "corridor_id": "E04",
+    "risk_level": "高",
+    "message": "[模拟GPS] WNC-DEMO-01 通过高风险廊道 E04，成本增加比例 65.0%"
+  },
+  {
+    "bird_id": "WNC-DEMO-01",
+    "timestamp": "2026-03-18T16:00:00+08:00",
+    "lon": 122.25,
+    "lat": 44.35,
+    "near_node": "N05",
+    "corridor_id": "E06",
+    "risk_level": "高",
+    "message": "[模拟GPS] WNC-DEMO-01 抵达核心停歇节点 N05，基础设施压力较高"
+  },
+  {
+    "bird_id": "WNC-DEMO-01",
+    "timestamp": "2026-03-19T09:00:00+08:00",
+    "lon": 121.0,
+    "lat": 46.1,
+    "near_node": "N07",
+    "corridor_id": "E06",
+    "risk_level": "高",
+    "message": "[模拟GPS] WNC-DEMO-01 通过高风险廊道 E06，成本增加比例 57.3%"
+  },
+  {
+    "bird_id": "WNC-DEMO-01",
+    "timestamp": "2026-03-19T11:00:00+08:00",
+    "lon": 117.52,
+    "lat": 48.95,
+    "near_node": "N07",
+    "corridor_id": "E10",
+    "risk_level": "中",
+    "message": "[模拟GPS] WNC-DEMO-01 抵达呼伦湖湿地节点 N07，建议保持常规监测"
+  },
+  {
+    "bird_id": "WNC-DEMO-01",
+    "timestamp": "2026-03-19T13:00:00+08:00",
+    "lon": 119.4,
+    "lat": 49.1,
+    "near_node": "N10",
+    "corridor_id": "E10",
+    "risk_level": "中",
+    "message": "[模拟GPS] WNC-DEMO-01 进入北部主廊道，当前风险等级：中"
+  },
+  {
+    "bird_id": "WNC-DEMO-01",
+    "timestamp": "2026-03-19T15:00:00+08:00",
+    "lon": 124.2,
+    "lat": 49.1,
+    "near_node": "N10",
+    "corridor_id": "E09",
+    "risk_level": "高",
+    "message": "[模拟GPS] WNC-DEMO-01 接近高风险廊道 E09，建议核查局部瓶颈"
+  },
+  {
+    "bird_id": "WNC-DEMO-01",
+    "timestamp": "2026-03-19T17:00:00+08:00",
+    "lon": 128.4,
+    "lat": 49.2,
+    "near_node": "N10",
+    "corridor_id": "E09",
+    "risk_level": "中",
+    "message": "[模拟GPS] WNC-DEMO-01 抵达核心停歇节点 N10，轨迹回放演示完成"
+  }
+]

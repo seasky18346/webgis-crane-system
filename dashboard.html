@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>迁徙鸟类廊道-电力基础设施风险态势大屏</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="vendor/ol/ol.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="dashboard-page">
+  <main class="dashboard-shell">
+    <header class="dashboard-header">
+      <div>
+        <h1>迁徙鸟类廊道-电力基础设施风险态势大屏</h1>
+        <p>当前示范案例：白枕鹤春季迁徙网络；模拟 GPS 仅用于课程演示</p>
+      </div>
+      <div class="button-row">
+        <button id="dashboard-back-btn" type="button">返回分析系统</button>
+        <button data-gps-start class="primary" type="button">启动回放</button>
+        <button data-gps-pause type="button">暂停</button>
+        <button data-gps-reset type="button">重置</button>
+      </div>
+    </header>
+
+    <section class="dashboard-column">
+      <div class="dashboard-card">
+        <h2>总览指标</h2>
+        <div id="dashboard-metrics" class="dashboard-metrics"></div>
+      </div>
+      <div class="dashboard-card">
+        <h2>风险等级统计</h2>
+        <div id="risk-bars" class="bar-list"></div>
+      </div>
+      <div class="dashboard-card">
+        <h2>廊道成本变化统计</h2>
+        <div id="cost-bars" class="bar-list"></div>
+      </div>
+    </section>
+
+    <section class="dashboard-map-panel">
+      <div class="dashboard-map-badge">天地图暗色底图：节点 / 廊道 / 高风险 / 模拟 GPS</div>
+      <div id="dashboard-map" class="dashboard-map"></div>
+      <div id="map-popup" class="map-popup" style="display:none">
+        <button id="popup-closer" class="popup-closer" type="button">×</button>
+        <div id="popup-content"></div>
+      </div>
+    </section>
+
+    <section class="dashboard-side">
+      <div class="dashboard-card">
+        <h2>基础设施压力概览</h2>
+        <div id="pressure-overview" class="pressure-overview"></div>
+      </div>
+      <div class="dashboard-card">
+        <h2>模拟 GPS 实时播报</h2>
+        <p class="tool-status" data-gps-status>模拟 GPS 播报等待启动</p>
+        <div class="gps-feed dashboard-feed" data-gps-feed>
+          <p class="empty-note">模拟 GPS 播报等待启动</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="vendor/ol/ol.js"></script>
+  <script src="vendor/turf/turf.min.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/demoData.js"></script>
+  <script src="js/renderers.js"></script>
+  <script src="js/layers.js"></script>
+  <script src="js/gpsReplay.js"></script>
+  <script src="js/dashboard.js"></script>
+</body>
+</html>

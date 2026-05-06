@@ -15,6 +15,9 @@
     if (key === "conservation_notes") {
       return `${prop(feature, "note_id")} ${prop(feature, "name")}`;
     }
+    if (key === "gps") {
+      return `${prop(feature, "bird_id")} 模拟 GPS`;
+    }
     return prop(feature, "name") || prop(feature, "infra_id") || "要素";
   }
 
@@ -28,6 +31,9 @@
     }
     if (key === "conservation_notes") {
       return `${prop(feature, "note_type")}｜优先级：${prop(feature, "priority")}`;
+    }
+    if (key === "gps") {
+      return `${prop(feature, "near_node")}｜廊道：${prop(feature, "corridor_id")}｜风险：${prop(feature, "risk_level")}`;
     }
     return `${prop(feature, "infra_type") || "基础设施"}｜压力：${prop(feature, "pressure_level")}`;
   }
