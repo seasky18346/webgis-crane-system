@@ -1,0 +1,62 @@
+{
+  "type": "FeatureCollection",
+  "name": "conservation_notes",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "note_id": "C01",
+        "name": "辽西廊道核查点",
+        "note_type": "人工核查点",
+        "priority": "高",
+        "suggestion": "建议优先核查风电场与廊道交汇区，评估季节性停机或警示措施。",
+        "editor": "课程演示",
+        "edit_date": "2026-05-05",
+        "remark": "对应 N04 周边高风险区"
+      },
+      "geometry": { "type": "Point", "coordinates": [120.65, 41.55] }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "note_id": "C02",
+        "name": "科尔沁候选保护地",
+        "note_type": "候选保护地",
+        "priority": "高",
+        "suggestion": "建议围绕核心停歇湿地建立廊道缓冲管理区。",
+        "editor": "课程演示",
+        "edit_date": "2026-05-05",
+        "remark": "靠近 N05"
+      },
+      "geometry": { "type": "Point", "coordinates": [122.05, 44.55] }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "note_id": "C03",
+        "name": "达里诺尔替代通道保护建议",
+        "note_type": "保护建议点",
+        "priority": "中",
+        "suggestion": "维持低干扰湿地斑块，作为高压廊道的替代停歇节点。",
+        "editor": "课程演示",
+        "edit_date": "2026-05-05",
+        "remark": "中等优先级"
+      },
+      "geometry": { "type": "Point", "coordinates": [116.9, 43.45] }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "note_id": "C04",
+        "name": "东方省风险标注",
+        "note_type": "风险标注点",
+        "priority": "高",
+        "suggestion": "建议补充跨境设施资料，识别 E09 廊道的局部瓶颈。",
+        "editor": "课程演示",
+        "edit_date": "2026-05-05",
+        "remark": "靠近 N09"
+      },
+      "geometry": { "type": "Point", "coordinates": [114.45, 47.65] }
+    }
+  ]
+}

@@ -1,0 +1,156 @@
+{
+  "type": "FeatureCollection",
+  "name": "migration_nodes",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": "N01",
+        "node_name": "鄱阳湖越冬集结区",
+        "node_type": "核心停歇节点",
+        "stopover_count": 18,
+        "individual_count": 12,
+        "mean_duration": 7.8,
+        "pagerank": 0.18,
+        "risk_level": "中",
+        "remark": "春季北迁起点示意节点"
+      },
+      "geometry": { "type": "Point", "coordinates": [116.29, 29.08] }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": "N02",
+        "node_name": "黄河三角洲停歇区",
+        "node_type": "核心停歇节点",
+        "stopover_count": 15,
+        "individual_count": 10,
+        "mean_duration": 5.6,
+        "pagerank": 0.16,
+        "risk_level": "中",
+        "remark": "滨海湿地停歇节点"
+      },
+      "geometry": { "type": "Point", "coordinates": [118.95, 37.75] }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": "N03",
+        "node_name": "渤海湾北岸节点",
+        "node_type": "一般停歇节点",
+        "stopover_count": 9,
+        "individual_count": 7,
+        "mean_duration": 3.2,
+        "pagerank": 0.09,
+        "risk_level": "低",
+        "remark": "海岸带连接节点"
+      },
+      "geometry": { "type": "Point", "coordinates": [117.72, 39.05] }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": "N04",
+        "node_name": "辽西丘陵湿地节点",
+        "node_type": "连接节点",
+        "stopover_count": 7,
+        "individual_count": 5,
+        "mean_duration": 2.4,
+        "pagerank": 0.11,
+        "risk_level": "高",
+        "remark": "廊道转折区，邻近风电和输电设施"
+      },
+      "geometry": { "type": "Point", "coordinates": [120.85, 41.35] }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": "N05",
+        "node_name": "科尔沁草原停歇区",
+        "node_type": "核心停歇节点",
+        "stopover_count": 16,
+        "individual_count": 11,
+        "mean_duration": 6.4,
+        "pagerank": 0.21,
+        "risk_level": "高",
+        "remark": "春迁网络关键节点，基础设施压力较高"
+      },
+      "geometry": { "type": "Point", "coordinates": [122.25, 44.35] }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": "N06",
+        "node_name": "达里诺尔湖节点",
+        "node_type": "一般停歇节点",
+        "stopover_count": 8,
+        "individual_count": 6,
+        "mean_duration": 3.6,
+        "pagerank": 0.08,
+        "risk_level": "中",
+        "remark": "内蒙古中部替代停歇节点"
+      },
+      "geometry": { "type": "Point", "coordinates": [116.65, 43.28] }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": "N07",
+        "node_name": "呼伦湖湿地节点",
+        "node_type": "核心停歇节点",
+        "stopover_count": 14,
+        "individual_count": 9,
+        "mean_duration": 5.2,
+        "pagerank": 0.14,
+        "risk_level": "中",
+        "remark": "中俄蒙交界区域重要停歇节点"
+      },
+      "geometry": { "type": "Point", "coordinates": [117.52, 48.95] }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": "N08",
+        "node_name": "鄂嫩河流域节点",
+        "node_type": "连接节点",
+        "stopover_count": 5,
+        "individual_count": 4,
+        "mean_duration": 2.1,
+        "pagerank": 0.06,
+        "risk_level": "低",
+        "remark": "蒙古国东北部连接节点"
+      },
+      "geometry": { "type": "Point", "coordinates": [111.55, 49.02] }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": "N09",
+        "node_name": "东方省湿地节点",
+        "node_type": "一般停歇节点",
+        "stopover_count": 10,
+        "individual_count": 8,
+        "mean_duration": 4.1,
+        "pagerank": 0.1,
+        "risk_level": "高",
+        "remark": "邻近跨境基础设施走廊"
+      },
+      "geometry": { "type": "Point", "coordinates": [114.35, 47.75] }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "node_id": "N10",
+        "node_name": "黑龙江中游繁殖前节点",
+        "node_type": "核心停歇节点",
+        "stopover_count": 13,
+        "individual_count": 9,
+        "mean_duration": 5.9,
+        "pagerank": 0.15,
+        "risk_level": "中",
+        "remark": "进入繁殖区前的北部关键节点"
+      },
+      "geometry": { "type": "Point", "coordinates": [128.4, 49.2] }
+    }
+  ]
+}

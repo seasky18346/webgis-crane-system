@@ -1,0 +1,15 @@
+{
+  "name": "webgis-crane-gp-server",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Lightweight GP service for the crane migration WebGIS coursework demo.",
+  "main": "gp-server.js",
+  "scripts": {
+    "start": "node gp-server.js"
+  },
+  "dependencies": {
+    "@turf/turf": "^6.5.0",
+    "cors": "^2.8.5",
+    "express": "^4.18.3"
+  }
+}

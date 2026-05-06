@@ -1,0 +1,198 @@
+{
+  "type": "FeatureCollection",
+  "name": "migration_corridors",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "edge_id": "E01",
+        "from_node": "N01",
+        "to_node": "N02",
+        "baseline_cost": 120,
+        "infra_cost": 138,
+        "cost_change": 18,
+        "cost_change_pct": 15,
+        "corridor_type": "主廊道",
+        "risk_level": "中",
+        "remark": "越冬区至黄河三角洲的北迁通道"
+      },
+      "geometry": { "type": "LineString", "coordinates": [[116.29, 29.08], [117.1, 33.2], [118.95, 37.75]] }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "edge_id": "E02",
+        "from_node": "N02",
+        "to_node": "N03",
+        "baseline_cost": 62,
+        "infra_cost": 68,
+        "cost_change": 6,
+        "cost_change_pct": 9.7,
+        "corridor_type": "一般廊道",
+        "risk_level": "低",
+        "remark": "滨海湿地短距离连接"
+      },
+      "geometry": { "type": "LineString", "coordinates": [[118.95, 37.75], [118.55, 38.5], [117.72, 39.05]] }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "edge_id": "E03",
+        "from_node": "N03",
+        "to_node": "N04",
+        "baseline_cost": 88,
+        "infra_cost": 125,
+        "cost_change": 37,
+        "cost_change_pct": 42,
+        "corridor_type": "高风险廊道",
+        "risk_level": "高",
+        "remark": "进入辽西丘陵前受设施干扰增强"
+      },
+      "geometry": { "type": "LineString", "coordinates": [[117.72, 39.05], [119.0, 40.25], [120.85, 41.35]] }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "edge_id": "E04",
+        "from_node": "N04",
+        "to_node": "N05",
+        "baseline_cost": 80,
+        "infra_cost": 132,
+        "cost_change": 52,
+        "cost_change_pct": 65,
+        "corridor_type": "高风险廊道",
+        "risk_level": "高",
+        "remark": "风电场与输电线路叠加影响明显"
+      },
+      "geometry": { "type": "LineString", "coordinates": [[120.85, 41.35], [121.45, 42.65], [122.25, 44.35]] }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "edge_id": "E05",
+        "from_node": "N04",
+        "to_node": "N06",
+        "baseline_cost": 75,
+        "infra_cost": 95,
+        "cost_change": 20,
+        "cost_change_pct": 26.7,
+        "corridor_type": "一般廊道",
+        "risk_level": "中",
+        "remark": "向内蒙古中部的替代通道"
+      },
+      "geometry": { "type": "LineString", "coordinates": [[120.85, 41.35], [118.6, 42.4], [116.65, 43.28]] }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "edge_id": "E06",
+        "from_node": "N05",
+        "to_node": "N07",
+        "baseline_cost": 96,
+        "infra_cost": 151,
+        "cost_change": 55,
+        "cost_change_pct": 57.3,
+        "corridor_type": "高风险廊道",
+        "risk_level": "高",
+        "remark": "科尔沁至呼伦湖方向设施压力较高"
+      },
+      "geometry": { "type": "LineString", "coordinates": [[122.25, 44.35], [121.0, 46.1], [117.52, 48.95]] }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "edge_id": "E07",
+        "from_node": "N06",
+        "to_node": "N08",
+        "baseline_cost": 82,
+        "infra_cost": 106,
+        "cost_change": 24,
+        "cost_change_pct": 29.3,
+        "corridor_type": "一般廊道",
+        "risk_level": "中",
+        "remark": "绕行蒙古国东北部的低密度通道"
+      },
+      "geometry": { "type": "LineString", "coordinates": [[116.65, 43.28], [114.0, 46.2], [111.55, 49.02]] }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "edge_id": "E08",
+        "from_node": "N08",
+        "to_node": "N09",
+        "baseline_cost": 48,
+        "infra_cost": 62,
+        "cost_change": 14,
+        "cost_change_pct": 29.2,
+        "corridor_type": "一般廊道",
+        "risk_level": "中",
+        "remark": "跨境湿地间连接"
+      },
+      "geometry": { "type": "LineString", "coordinates": [[111.55, 49.02], [113.0, 48.4], [114.35, 47.75]] }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "edge_id": "E09",
+        "from_node": "N09",
+        "to_node": "N10",
+        "baseline_cost": 118,
+        "infra_cost": 178,
+        "cost_change": 60,
+        "cost_change_pct": 50.8,
+        "corridor_type": "高风险廊道",
+        "risk_level": "高",
+        "remark": "东方省至黑龙江中游方向高风险连接"
+      },
+      "geometry": { "type": "LineString", "coordinates": [[114.35, 47.75], [119.8, 48.7], [124.2, 49.1], [128.4, 49.2]] }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "edge_id": "E10",
+        "from_node": "N07",
+        "to_node": "N10",
+        "baseline_cost": 74,
+        "infra_cost": 96,
+        "cost_change": 22,
+        "cost_change_pct": 29.7,
+        "corridor_type": "主廊道",
+        "risk_level": "中",
+        "remark": "呼伦湖至黑龙江中游的北部主通道"
+      },
+      "geometry": { "type": "LineString", "coordinates": [[117.52, 48.95], [121.6, 49.0], [128.4, 49.2]] }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "edge_id": "E11",
+        "from_node": "N05",
+        "to_node": "N09",
+        "baseline_cost": 90,
+        "infra_cost": 132,
+        "cost_change": 42,
+        "cost_change_pct": 46.7,
+        "corridor_type": "高风险廊道",
+        "risk_level": "高",
+        "remark": "科尔沁至东方省方向的斜向连接"
+      },
+      "geometry": { "type": "LineString", "coordinates": [[122.25, 44.35], [119.5, 45.5], [116.2, 46.6], [114.35, 47.75]] }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "edge_id": "E12",
+        "from_node": "N02",
+        "to_node": "N04",
+        "baseline_cost": 100,
+        "infra_cost": 122,
+        "cost_change": 22,
+        "cost_change_pct": 22,
+        "corridor_type": "主廊道",
+        "risk_level": "中",
+        "remark": "黄河三角洲至辽西的内陆连接"
+      },
+      "geometry": { "type": "LineString", "coordinates": [[118.95, 37.75], [119.9, 39.4], [120.85, 41.35]] }
+    }
+  ]
+}

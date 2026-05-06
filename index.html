@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>飞越风与电：白枕鹤迁徙廊道 WebGIS 分析系统</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="vendor/ol/ol.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="app-header">
+    <div>
+      <h1>飞越风与电：白枕鹤迁徙廊道 WebGIS 分析系统</h1>
+      <p>春季迁徙节点、廊道与基础设施压力可视化</p>
+    </div>
+    <div class="status-strip">
+      <span id="data-mode-chip">本地 GeoJSON</span>
+      <span id="gp-mode-chip">前端 Turf GP</span>
+      <span id="service-chip">GeoServer 可替换</span>
+    </div>
+  </header>
+
+  <div class="app-shell">
+    <aside class="left-panel">
+      <section class="tool-block">
+        <h2>图层</h2>
+        <label><input type="checkbox" id="layer-migration_nodes" checked> 迁徙节点</label>
+        <label><input type="checkbox" id="layer-migration_corridors" checked> 迁徙廊道</label>
+        <label><input type="checkbox" id="layer-wind_farms" checked> 风电场</label>
+        <label><input type="checkbox" id="layer-powerlines" checked> 输电线路</label>
+        <label><input type="checkbox" id="layer-conservation_notes" checked> 保护建议</label>
+        <button id="zoom-all" type="button">全图</button>
+      </section>
+
+      <section class="tool-block">
+        <h2>查询</h2>
+        <div class="field-grid">
+          <input id="node-id-input" type="text" placeholder="节点编号 N05">
+          <select id="node-type-select">
+            <option value="">全部类型</option>
+            <option>核心停歇节点</option>
+            <option>一般停歇节点</option>
+            <option>连接节点</option>
+          </select>
+          <select id="node-risk-select">
+            <option value="">全部风险</option>
+            <option>低</option>
+            <option>中</option>
+            <option>高</option>
+          </select>
+          <button id="node-query-btn" type="button">查询节点</button>
+        </div>
+        <div class="field-grid">
+          <input id="corridor-edge-input" type="text" placeholder="廊道编号 E04">
+          <input id="corridor-threshold-input" type="number" min="0" step="5" placeholder="成本变化阈值 %">
+          <button id="corridor-query-btn" type="button">查询廊道</button>
+          <button id="corridor-risk-btn" type="button">高风险廊道</button>
+        </div>
+        <div class="field-grid">
+          <select id="note-priority-select">
+            <option value="">全部优先级</option>
+            <option>高</option>
+            <option>中</option>
+            <option>低</option>
+          </select>
+          <button id="note-query-btn" type="button">查询保护建议</button>
+          <button id="clear-highlight-btn" type="button">清除高亮</button>
+        </div>
+      </section>
+
+      <section class="tool-block">
+        <h2>编辑保护建议</h2>
+        <div class="button-row">
+          <button id="edit-add-btn" type="button">新增标注</button>
+          <button id="edit-save-btn" type="button">保存属性</button>
+          <button id="edit-delete-btn" type="button">删除标注</button>
+          <button id="edit-export-btn" type="button">导出 GeoJSON</button>
+        </div>
+        <div class="field-stack">
+          <input id="edit-name" type="text" placeholder="名称">
+          <select id="edit-type">
+            <option>候选保护地</option>
+            <option>风险标注点</option>
+            <option>人工核查点</option>
+            <option>保护建议点</option>
+          </select>
+          <select id="edit-priority">
+            <option>高</option>
+            <option>中</option>
+            <option>低</option>
+          </select>
+          <textarea id="edit-suggestion" rows="2" placeholder="保护建议"></textarea>
+          <input id="edit-editor" type="text" placeholder="编辑人">
+          <textarea id="edit-remark" rows="2" placeholder="备注"></textarea>
+        </div>
+        <p id="edit-status" class="tool-status">仅 conservation_notes 可编辑</p>
+      </section>
+
+      <section class="tool-block">
+        <h2>专题渲染</h2>
+        <div class="field-stack">
+          <select id="node-render-select">
+            <option value="risk">节点：风险等级</option>
+            <option value="importance">节点：网络重要性</option>
+          </select>
+          <select id="corridor-render-select">
+            <option value="cost">廊道：成本变化比例</option>
+            <option value="risk">廊道：风险等级</option>
+          </select>
+          <select id="note-render-select">
+            <option value="priority">保护建议：优先级</option>
+          </select>
+          <button id="apply-render-btn" type="button">应用渲染</button>
+        </div>
+      </section>
+
+      <section class="tool-block">
+        <h2>节点压力分析</h2>
+        <div class="field-stack">
+          <select id="gp-node-select"></select>
+          <input id="gp-radius-input" type="number" min="1" max="100" value="30">
+          <div class="button-row">
+            <button id="gp-map-point-btn" type="button">地图取点</button>
+            <button id="gp-start-btn" type="button">开始分析</button>
+          </div>
+        </div>
+        <p id="gp-status" class="tool-status">半径单位：km</p>
+      </section>
+
+      <section class="tool-block">
+        <h2>阻断效应演示</h2>
+        <div class="step-grid">
+          <button id="demo-step-1" type="button">Step 1 自然廊道</button>
+          <button id="demo-step-2" type="button">Step 2 基础设施</button>
+          <button id="demo-step-3" type="button">Step 3 高风险</button>
+          <button id="demo-step-4" type="button">Step 4 保护建议</button>
+          <button id="demo-step-5" type="button">Step 5 节点分析</button>
+        </div>
+        <div class="button-row">
+          <button id="anim-start" type="button">开始高亮</button>
+          <button id="anim-pause" type="button">暂停</button>
+          <button id="anim-reset" type="button">重置</button>
+        </div>
+      </section>
+    </aside>
+
+    <main class="map-wrap">
+      <div id="map" class="map"></div>
+      <div id="map-popup" class="map-popup">
+        <button id="popup-closer" class="popup-closer" type="button">×</button>
+        <div id="popup-content"></div>
+      </div>
+    </main>
+
+    <aside class="right-panel">
+      <section class="output-block">
+        <h2>查询结果</h2>
+        <div id="query-results" class="result-list"></div>
+      </section>
+      <section class="output-block">
+        <h2>分析结果</h2>
+        <div id="gp-results" class="analysis-output"></div>
+      </section>
+      <section class="output-block">
+        <h2>图例</h2>
+        <div id="legend" class="legend"></div>
+      </section>
+      <section class="output-block">
+        <h2>要素属性</h2>
+        <div id="feature-details" class="feature-details"></div>
+      </section>
+    </aside>
+  </div>
+
+  <script src="vendor/ol/ol.js"></script>
+  <script src="vendor/turf/turf.min.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/demoData.js"></script>
+  <script src="js/renderers.js"></script>
+  <script src="js/layers.js"></script>
+  <script src="js/query.js"></script>
+  <script src="js/edit.js"></script>
+  <script src="js/gpAnalysis.js"></script>
+  <script src="js/animation.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,94 @@
+{
+  "type": "FeatureCollection",
+  "name": "wind_farms",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "infra_id": "W01",
+        "name": "张北示意风电场",
+        "infra_type": "风电",
+        "pressure_level": "中",
+        "remark": "演示用点位"
+      },
+      "geometry": { "type": "Point", "coordinates": [114.75, 41.15] }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "infra_id": "W02",
+        "name": "赤峰北部风电场",
+        "infra_type": "风电",
+        "pressure_level": "中",
+        "remark": "靠近内蒙古中部替代廊道"
+      },
+      "geometry": { "type": "Point", "coordinates": [118.8, 42.25] }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "infra_id": "W03",
+        "name": "通辽西部风电场",
+        "infra_type": "风电",
+        "pressure_level": "高",
+        "remark": "靠近科尔沁高风险节点"
+      },
+      "geometry": { "type": "Point", "coordinates": [121.85, 43.9] }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "infra_id": "W04",
+        "name": "兴安南部风电场",
+        "infra_type": "风电",
+        "pressure_level": "高",
+        "remark": "位于 N05-N07 廊道附近"
+      },
+      "geometry": { "type": "Point", "coordinates": [121.15, 46.05] }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "infra_id": "W05",
+        "name": "东方省风电场",
+        "infra_type": "风电",
+        "pressure_level": "高",
+        "remark": "靠近跨境风险廊道"
+      },
+      "geometry": { "type": "Point", "coordinates": [114.65, 47.55] }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "infra_id": "W06",
+        "name": "呼伦贝尔东部风电场",
+        "infra_type": "风电",
+        "pressure_level": "中",
+        "remark": "靠近北部主通道"
+      },
+      "geometry": { "type": "Point", "coordinates": [119.05, 49.15] }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "infra_id": "W07",
+        "name": "辽西山地风电场",
+        "infra_type": "风电",
+        "pressure_level": "高",
+        "remark": "靠近辽西丘陵湿地节点"
+      },
+      "geometry": { "type": "Point", "coordinates": [120.45, 41.65] }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "infra_id": "W08",
+        "name": "科尔沁东缘风电场",
+        "infra_type": "风电",
+        "pressure_level": "高",
+        "remark": "靠近 N05 高风险节点"
+      },
+      "geometry": { "type": "Point", "coordinates": [123.35, 44.85] }
+    }
+  ]
+}

@@ -1,0 +1,72 @@
+{
+  "type": "FeatureCollection",
+  "name": "powerlines",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "infra_id": "P01",
+        "name": "冀辽跨区输电线路",
+        "voltage": "500kV",
+        "pressure_level": "中",
+        "remark": "穿越渤海湾至辽西连接区"
+      },
+      "geometry": { "type": "LineString", "coordinates": [[117.4, 39.6], [119.2, 40.4], [121.0, 41.55]] }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "infra_id": "P02",
+        "name": "赤峰至通辽输电线路",
+        "voltage": "500kV",
+        "pressure_level": "高",
+        "remark": "靠近 E04 高风险廊道"
+      },
+      "geometry": { "type": "LineString", "coordinates": [[118.3, 42.1], [120.2, 43.0], [122.45, 44.2]] }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "infra_id": "P03",
+        "name": "通辽至兴安输电线路",
+        "voltage": "220kV",
+        "pressure_level": "高",
+        "remark": "邻近科尔沁至呼伦湖廊道"
+      },
+      "geometry": { "type": "LineString", "coordinates": [[122.1, 44.3], [121.8, 45.4], [121.05, 46.2]] }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "infra_id": "P04",
+        "name": "东方省跨境输电线路",
+        "voltage": "220kV",
+        "pressure_level": "高",
+        "remark": "靠近 N09 和 E09"
+      },
+      "geometry": { "type": "LineString", "coordinates": [[113.7, 47.2], [115.2, 47.8], [117.4, 48.2]] }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "infra_id": "P05",
+        "name": "呼伦贝尔北部输电线路",
+        "voltage": "500kV",
+        "pressure_level": "中",
+        "remark": "北部主通道附近"
+      },
+      "geometry": { "type": "LineString", "coordinates": [[116.8, 48.6], [119.4, 49.1], [122.2, 49.2]] }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "infra_id": "P06",
+        "name": "滨海开发区输电线路",
+        "voltage": "220kV",
+        "pressure_level": "低",
+        "remark": "靠近黄河三角洲北迁起始段"
+      },
+      "geometry": { "type": "LineString", "coordinates": [[117.8, 37.4], [118.8, 38.0], [119.5, 38.7]] }
+    }
+  ]
+}
