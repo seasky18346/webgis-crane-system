@@ -46,6 +46,14 @@
     if (demoStatus) demoStatus.textContent = text;
   }
 
+  function setActiveDemoButton(buttonId) {
+    document.querySelectorAll(".step-grid button").forEach((button) => {
+      const active = button.id === buttonId;
+      button.classList.toggle("is-active", active);
+      button.setAttribute("aria-pressed", active ? "true" : "false");
+    });
+  }
+
   function setDemoStage(step, title, detail, updateList) {
     const banner = document.getElementById("demo-stage-banner");
     const stepNode = document.getElementById("demo-stage-step");
@@ -70,6 +78,7 @@
 
   function step1() {
     stopAnimation();
+    setActiveDemoButton("demo-step-1");
     window.CraneLayers.clearAnalysis();
     window.CraneLayers.clearHighlight();
     setVisible(["migration_nodes", "migration_corridors"]);
@@ -80,6 +89,7 @@
 
   function step2() {
     stopAnimation();
+    setActiveDemoButton("demo-step-2");
     window.CraneLayers.clearHighlight();
     setVisible(["migration_nodes", "migration_corridors", "wind_farms", "powerlines"]);
     highlightAndZoom(infraFeatures());
@@ -88,6 +98,7 @@
 
   function step3() {
     stopAnimation();
+    setActiveDemoButton("demo-step-3");
     window.CraneLayers.clearAnalysis();
     setVisible(["migration_nodes", "migration_corridors", "wind_farms", "powerlines"]);
     const features = highRiskCorridors();
@@ -98,6 +109,7 @@
 
   function step4() {
     stopAnimation();
+    setActiveDemoButton("demo-step-4");
     window.CraneLayers.clearAnalysis();
     setVisible(["migration_nodes", "migration_corridors", "wind_farms", "powerlines", "conservation_notes"]);
     const features = highPriorityNotes();
@@ -108,6 +120,7 @@
 
   async function step5() {
     stopAnimation();
+    setActiveDemoButton("demo-step-5");
     setVisible(["migration_nodes", "migration_corridors", "wind_farms", "powerlines", "conservation_notes"]);
     document.getElementById("gp-node-select").value = "N05";
     document.getElementById("gp-radius-input").value = "30";
@@ -120,6 +133,7 @@
     const features = highRiskCorridors();
     if (!features.length) return;
     stopAnimation();
+    setActiveDemoButton("anim-start");
     setVisible(["migration_nodes", "migration_corridors", "wind_farms", "powerlines"]);
     cursor = 0;
     timer = window.setInterval(() => {
@@ -148,6 +162,7 @@
 
   function demoStepNodes() {
     stopAnimation();
+    setActiveDemoButton("demo-step-1");
     window.CraneGPSReplay.pause();
     window.CraneLayers.clearAnalysis();
     window.CraneLayers.clearHighlight();
@@ -159,6 +174,7 @@
 
   function demoStepCorridors() {
     stopAnimation();
+    setActiveDemoButton("demo-step-1");
     window.CraneLayers.clearHighlight();
     setVisible(["migration_nodes", "migration_corridors"]);
     const features = layerFeatures("migration_corridors");
@@ -168,6 +184,7 @@
 
   function demoStepInfrastructure() {
     stopAnimation();
+    setActiveDemoButton("demo-step-2");
     window.CraneLayers.clearHighlight();
     setVisible(["migration_nodes", "migration_corridors", "wind_farms", "powerlines"]);
     highlightAndZoom(infraFeatures());
@@ -176,6 +193,7 @@
 
   function demoStepHighRisk() {
     stopAnimation();
+    setActiveDemoButton("demo-step-3");
     setVisible(["migration_nodes", "migration_corridors", "wind_farms", "powerlines"]);
     const features = highRiskCorridors();
     highlightAndZoom(features);
@@ -185,6 +203,7 @@
 
   function demoStepNotes() {
     stopAnimation();
+    setActiveDemoButton("demo-step-4");
     setVisible(["migration_nodes", "migration_corridors", "wind_farms", "powerlines", "conservation_notes"]);
     const features = highPriorityNotes();
     highlightAndZoom(features);
@@ -194,6 +213,7 @@
 
   async function demoStepGP() {
     stopAnimation();
+    setActiveDemoButton("demo-step-5");
     setVisible(["migration_nodes", "migration_corridors", "wind_farms", "powerlines", "conservation_notes"]);
     document.getElementById("gp-node-select").value = "N05";
     document.getElementById("gp-radius-input").value = "30";
@@ -203,12 +223,14 @@
   }
 
   async function demoStepGps() {
+    setActiveDemoButton(null);
     setVisible(["migration_nodes", "migration_corridors", "wind_farms", "powerlines", "conservation_notes"]);
     setDemoStage("演示 7/8", "模拟 GPS 轨迹回放", "启动轨迹回放演示，移动点经过高风险廊道时同步高亮提醒。");
     await window.CraneGPSReplay.start({ reset: true, interval: 1300 });
   }
 
   function demoStepDashboardTip() {
+    setActiveDemoButton(null);
     setVisible(["migration_nodes", "migration_corridors", "wind_farms", "powerlines", "conservation_notes"]);
     window.CraneLayers.clearHighlight();
     setDemoStage("演示 8/8", "进入数据大屏", "可打开数据大屏查看态势统计、模拟 GPS 播报和小地图。");
@@ -248,6 +270,7 @@
     autoPaused = true;
     clearAutoTimer();
     stopAnimation();
+    setActiveDemoButton(null);
     window.CraneGPSReplay.pause();
     setDemoStage("演示暂停", "一键演示已暂停", "可重新启动演示，或点击重置恢复完整图层。");
   }
@@ -258,6 +281,7 @@
     autoStepIndex = 0;
     stopAnimation();
     cursor = 0;
+    setActiveDemoButton(null);
     window.CraneGPSReplay.reset();
     window.CraneLayers.clearHighlight();
     window.CraneLayers.clearAnalysis();

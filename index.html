@@ -161,7 +161,8 @@
     </aside>
 
     <main class="map-wrap">
-      <div class="floating-nav">
+      <div class="floating-nav" aria-label="快速操作" aria-expanded="false">
+        <button id="floating-menu-btn" class="floating-menu-trigger" type="button" aria-label="展开快速操作" aria-expanded="false">...</button>
         <button id="floating-home-btn" type="button">主页</button>
         <button id="floating-dashboard-btn" type="button">大屏</button>
         <button id="panels-toggle-btn" type="button">隐藏面板</button>
@@ -169,7 +170,7 @@
       <div class="map-title-bar">
         <span>生态监测指挥舱</span>
       </div>
-      <div id="demo-stage-banner" class="demo-stage-banner" aria-live="polite">
+      <div id="demo-stage-banner" class="demo-stage-banner" aria-live="polite" aria-label="一键演示当前步骤">
         <span id="demo-stage-step">演示待启动</span>
         <strong id="demo-stage-title">一键演示模式</strong>
         <p id="demo-stage-detail">点击“一键演示”后，系统会按展示顺序高亮当前讲解对象。</p>

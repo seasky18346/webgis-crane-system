@@ -103,9 +103,18 @@
     const demo = document.getElementById("launch-demo-btn");
     const back = document.getElementById("back-launch-btn");
     const headerDashboard = document.getElementById("header-dashboard-btn");
+    const floatingNav = document.querySelector(".floating-nav");
+    const floatingMenu = document.getElementById("floating-menu-btn");
     const floatingHome = document.getElementById("floating-home-btn");
     const floatingDashboard = document.getElementById("floating-dashboard-btn");
     const panelsToggle = document.getElementById("panels-toggle-btn");
+    const setFloatingNavOpen = (open) => {
+      if (!floatingNav || !floatingMenu) return;
+      floatingNav.classList.toggle("is-open", open);
+      floatingNav.setAttribute("aria-expanded", open ? "true" : "false");
+      floatingMenu.setAttribute("aria-expanded", open ? "true" : "false");
+      floatingMenu.setAttribute("aria-label", open ? "收起快速操作" : "展开快速操作");
+    };
     if (enter) enter.addEventListener("click", hideLaunchScreen);
     if (dashboard) dashboard.addEventListener("click", () => {
       window.location.href = window.CraneConfig.DASHBOARD_URL;
@@ -114,13 +123,20 @@
       window.location.href = window.CraneConfig.DASHBOARD_URL;
     });
     if (back) back.addEventListener("click", showLaunchScreen);
-    if (floatingHome) floatingHome.addEventListener("click", showLaunchScreen);
+    if (floatingMenu) floatingMenu.addEventListener("click", () => {
+      setFloatingNavOpen(!floatingNav.classList.contains("is-open"));
+    });
+    if (floatingHome) floatingHome.addEventListener("click", () => {
+      showLaunchScreen();
+      setFloatingNavOpen(false);
+    });
     if (floatingDashboard) floatingDashboard.addEventListener("click", () => {
       window.location.href = window.CraneConfig.DASHBOARD_URL;
     });
     if (panelsToggle) panelsToggle.addEventListener("click", () => {
       document.body.classList.toggle("panels-hidden");
       panelsToggle.textContent = document.body.classList.contains("panels-hidden") ? "显示面板" : "隐藏面板";
+      setFloatingNavOpen(false);
     });
     if (demo) demo.addEventListener("click", async () => {
       hideLaunchScreen();
