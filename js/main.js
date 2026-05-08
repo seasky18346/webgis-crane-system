@@ -16,6 +16,17 @@
     "js/animation.js"
   ];
 
+  function preloadApplicationScripts() {
+    APP_SCRIPTS.forEach((src) => {
+      if (document.querySelector(`link[rel="preload"][href="${src}"]`)) return;
+      const link = document.createElement("link");
+      link.rel = "preload";
+      link.as = "script";
+      link.href = src;
+      document.head.appendChild(link);
+    });
+  }
+
   function loadScript(src) {
     return new Promise((resolve, reject) => {
       if (document.querySelector(`script[src="${src}"]`)) {
@@ -130,6 +141,9 @@
     document.body.classList.remove("is-launching");
     const launch = document.getElementById("launch-screen");
     if (launch) launch.setAttribute("aria-hidden", "true");
+    if (window.CraneLayers && window.CraneLayers.map) {
+      requestAnimationFrame(() => window.CraneLayers.map.updateSize());
+    }
   }
 
   function showLaunchScreen() {
@@ -160,6 +174,26 @@
       });
     }
     return bootstrapPromise;
+  }
+
+  function startBackgroundBootstrap() {
+    preloadApplicationScripts();
+    let started = false;
+    const start = () => {
+      if (started) return;
+      started = true;
+      ensureBootstrap().catch((error) => {
+        reportLaunchError("系统预加载失败", error);
+      });
+    };
+    const video = document.querySelector(".launch-bg-video");
+    if (!video || video.readyState >= 2) {
+      requestAnimationFrame(start);
+      return;
+    }
+    video.addEventListener("loadeddata", start, { once: true });
+    video.addEventListener("playing", start, { once: true });
+    window.setTimeout(start, 1200);
   }
 
   function setupLaunchActions() {
@@ -253,5 +287,6 @@
 
   window.addEventListener("DOMContentLoaded", () => {
     setupLaunchActions();
+    startBackgroundBootstrap();
   });
 })();
