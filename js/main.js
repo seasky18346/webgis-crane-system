@@ -1,6 +1,48 @@
 (function () {
   let bootstrapReady = false;
-  let queuedDemo = false;
+  let bootstrapPromise = null;
+  let applicationScriptsPromise = null;
+
+  const APP_SCRIPTS = [
+    "vendor/ol/ol.js",
+    "vendor/turf/turf.min.js",
+    "js/demoData.js",
+    "js/renderers.js",
+    "js/layers.js",
+    "js/query.js",
+    "js/edit.js",
+    "js/gpAnalysis.js",
+    "js/gpsReplay.js",
+    "js/animation.js"
+  ];
+
+  function loadScript(src) {
+    return new Promise((resolve, reject) => {
+      if (document.querySelector(`script[src="${src}"]`)) {
+        resolve();
+        return;
+      }
+      const script = document.createElement("script");
+      script.src = src;
+      script.async = false;
+      script.onload = resolve;
+      script.onerror = () => reject(new Error(`无法加载 ${src}`));
+      document.body.appendChild(script);
+    });
+  }
+
+  function loadApplicationScripts() {
+    if (!applicationScriptsPromise) {
+      applicationScriptsPromise = APP_SCRIPTS.reduce(
+        (chain, src) => chain.then(() => loadScript(src)),
+        Promise.resolve()
+      ).catch((error) => {
+        applicationScriptsPromise = null;
+        throw error;
+      });
+    }
+    return applicationScriptsPromise;
+  }
 
   function populateNodeSelect() {
     const select = document.getElementById("gp-node-select");
@@ -10,7 +52,7 @@
         name: feature.get("node_name")
       }))
       .sort((a, b) => a.id.localeCompare(b.id));
-    select.innerHTML = `<option value="">地图取点或选择节点</option>` +
+    select.innerHTML = "<option value=\"\">地图取点或选择节点</option>" +
       options.map((item) => `<option value="${item.id}">${item.id} ${item.name}</option>`).join("");
     select.value = "N05";
   }
@@ -96,6 +138,30 @@
     if (launch) launch.setAttribute("aria-hidden", "false");
   }
 
+  function setButtonBusy(button, busy, label) {
+    if (!button) return;
+    if (!button.dataset.originalLabel) button.dataset.originalLabel = button.textContent;
+    button.disabled = busy;
+    button.classList.toggle("is-loading", busy);
+    button.textContent = busy ? label : button.dataset.originalLabel;
+  }
+
+  function reportLaunchError(prefix, error) {
+    const copy = document.querySelector(".launch-copy");
+    if (copy) copy.textContent = `${prefix}：${error.message}`;
+  }
+
+  function ensureBootstrap() {
+    if (bootstrapReady) return Promise.resolve();
+    if (!bootstrapPromise) {
+      bootstrapPromise = bootstrap().catch((error) => {
+        bootstrapPromise = null;
+        throw error;
+      });
+    }
+    return bootstrapPromise;
+  }
+
   function setupLaunchActions() {
     showLaunchScreen();
     const enter = document.getElementById("enter-system-btn");
@@ -115,7 +181,18 @@
       floatingMenu.setAttribute("aria-expanded", open ? "true" : "false");
       floatingMenu.setAttribute("aria-label", open ? "收起快速操作" : "展开快速操作");
     };
-    if (enter) enter.addEventListener("click", hideLaunchScreen);
+
+    if (enter) enter.addEventListener("click", async () => {
+      setButtonBusy(enter, true, "系统加载中...");
+      try {
+        await ensureBootstrap();
+        hideLaunchScreen();
+      } catch (error) {
+        reportLaunchError("系统初始化失败", error);
+      } finally {
+        setButtonBusy(enter, false);
+      }
+    });
     if (dashboard) dashboard.addEventListener("click", () => {
       window.location.href = window.CraneConfig.DASHBOARD_URL;
     });
@@ -139,16 +216,22 @@
       setFloatingNavOpen(false);
     });
     if (demo) demo.addEventListener("click", async () => {
-      hideLaunchScreen();
-      queuedDemo = true;
-      if (bootstrapReady && window.CraneAnimation) {
-        await window.CraneAnimation.startFullDemo();
-        queuedDemo = false;
+      setButtonBusy(demo, true, "演示加载中...");
+      try {
+        await ensureBootstrap();
+        hideLaunchScreen();
+        if (window.CraneAnimation) await window.CraneAnimation.startFullDemo();
+      } catch (error) {
+        reportLaunchError("演示启动失败", error);
+      } finally {
+        setButtonBusy(demo, false);
       }
     });
   }
 
   async function bootstrap() {
+    await loadApplicationScripts();
+    setupCollapsiblePanels();
     setModeChips();
     const map = window.CraneLayers.initMap();
     await window.CraneLayers.loadAllLayers();
@@ -166,17 +249,9 @@
     document.getElementById("query-results").innerHTML = "<p class=\"empty-note\">系统已加载，可开始查询或演示</p>";
     document.getElementById("gp-results").innerHTML = "<p class=\"empty-note\">请选择节点或地图取点后开始分析</p>";
     bootstrapReady = true;
-    if (queuedDemo && window.CraneAnimation) {
-      await window.CraneAnimation.startFullDemo();
-      queuedDemo = false;
-    }
   }
 
   window.addEventListener("DOMContentLoaded", () => {
-    setupCollapsiblePanels();
     setupLaunchActions();
-    bootstrap().catch((error) => {
-      document.getElementById("query-results").innerHTML = `<p class="empty-note">系统初始化失败：${error.message}</p>`;
-    });
   });
 })();
