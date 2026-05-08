@@ -9,7 +9,30 @@
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body class="is-launching">
+  <div id="custom-cursor" class="custom-cursor" aria-hidden="true"></div>
   <section id="launch-screen" class="launch-screen" aria-hidden="false">
+    <video class="launch-bg-video" src="首页.mp4" autoplay muted loop playsinline preload="auto" poster="assets/launch-bg.png" aria-hidden="true"></video>
+    <div class="launch-topbar" aria-hidden="true">
+      <div class="launch-logo">WNC WebGIS</div>
+      <div class="launch-top-meta">
+        <span>风电基础设施风险</span>
+        <span>迁徙廊道演示中</span>
+      </div>
+    </div>
+    <div class="launch-code-rain" aria-hidden="true">
+      <span>WNC_CORRIDOR // WIND_FARM // POWERLINE // GPS_TRACE // RISK_NODE //</span>
+      <span>FLYWAY_ANALYSIS // CONSERVATION_NOTE // BUFFER_30KM // HABITAT_LINK //</span>
+      <span>N01 N02 N03 N04 N05 E01 E02 E03 E04 E05 PRESSURE_INDEX //</span>
+      <span>CRANE_ROUTE // TURBINE_FIELD // LINE_FLOW // PROTECTION_PRIORITY //</span>
+    </div>
+    <div class="launch-kinetic-field" aria-hidden="true">
+      <div class="wind-turbine turbine-a"><span class="mast"></span><span class="rotor"><i></i><i></i><i></i></span></div>
+      <div class="wind-turbine turbine-b"><span class="mast"></span><span class="rotor"><i></i><i></i><i></i></span></div>
+      <div class="wind-turbine turbine-c"><span class="mast"></span><span class="rotor"><i></i><i></i><i></i></span></div>
+      <div class="flying-crane crane-a"><span></span></div>
+      <div class="flying-crane crane-b"><span></span></div>
+      <div class="flying-crane crane-c"><span></span></div>
+    </div>
     <div class="launch-map-lines" aria-hidden="true">
       <span class="route route-a"></span>
       <span class="route route-b"></span>
@@ -245,6 +268,7 @@
   <script src="js/gpAnalysis.js"></script>
   <script src="js/gpsReplay.js"></script>
   <script src="js/animation.js"></script>
+  <script src="js/launchEffects.js"></script>
   <script src="js/main.js"></script>
 </body>
 </html>
